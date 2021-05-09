@@ -1,0 +1,12 @@
+{
+  "name": "sahm_server",
+  "version": "1.0.0",
+  "description": "Sahm application server side code",
+  "main": "index.js",
+  "repository": "https://HossamElharmeil@bitbucket.org/HossamElharmeil/sahm_server.git",
+  "author": "Hossam Elharmeil",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
