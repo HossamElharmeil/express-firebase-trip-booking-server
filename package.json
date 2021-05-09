@@ -6,7 +6,12 @@
   "repository": "https://HossamElharmeil@bitbucket.org/HossamElharmeil/sahm_server.git",
   "author": "Hossam Elharmeil",
   "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "nodemon": "nodemon"
+  },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7"
   }
 }
