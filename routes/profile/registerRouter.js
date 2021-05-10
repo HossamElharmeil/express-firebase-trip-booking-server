@@ -4,7 +4,7 @@ const db = require('firebase-admin').firestore()
 
 const registerRouter = Router()
 
-registerRouter.post('/registerCaptain', verifyToken, (req, res) => {
+registerRouter.post('/registerCaptain', verifyToken, async (req, res) => {
     const newData = {
         uid: req.uid,
         firstName: req.body.firstName,
