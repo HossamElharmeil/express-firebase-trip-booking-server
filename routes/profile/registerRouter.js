@@ -6,7 +6,7 @@ const registerRouter = Router()
 
 registerRouter.post('/registerCaptain', verifyToken, async (req, res) => {
     const newData = {
-        uid: req.uid,
+        uid: req.user.uid,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         phoneNumber: req.body.phoneNumber,
@@ -26,7 +26,7 @@ registerRouter.post('/registerCaptain', verifyToken, async (req, res) => {
 
 registerRouter.post('/registerUser', verifyToken, async (req, res) => {
     const newData = {
-        uid: req.uid,
+        uid: req.user.uid,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         phoneNumber: req.body.phoneNumber,
