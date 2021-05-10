@@ -1,5 +1,6 @@
 const Router = require('express').Router
 const db = require('firebase-admin').firestore()
+const auth = require('firebase-admin').auth()
 
 const captainsRouter = Router()
 
@@ -26,6 +27,8 @@ captainsRouter.delete('/deleteCaptain', async (req, res) => {
     const captainId = req.body.captainId
     try {
         await db.collection('captains').doc(captainId).delete()
+        await auth.deleteUser(captainId)
+        
         res.json({ success: "Captain removed" })
     }
     catch (error) {
