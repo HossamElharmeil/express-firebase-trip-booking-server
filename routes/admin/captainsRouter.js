@@ -10,7 +10,7 @@ captainsRouter.get('/getCaptains', async (req, res) => {
     res.json(captains)
 })
 
-captainsRouter.post('/verifyCaptain', async (req, res) => {
+captainsRouter.put('/verifyCaptain', async (req, res) => {
     const captainId = req.body.captainId
     try {
         await db.collection('captains').doc(captainId).set({ verified: true })
@@ -18,7 +18,19 @@ captainsRouter.post('/verifyCaptain', async (req, res) => {
     }
     catch (error) {
         console.error(error)
-        res.status(500).json("Something went wrong")
+        res.status(500).json({ error: "Something went wrong" })
+    }
+})
+
+captainsRouter.delete('/deleteCaptain', async (req, res) => {
+    const captainId = req.body.captainId
+    try {
+        await db.collection('captains').doc(captainId).delete()
+        res.json({ success: "Captain removed" })
+    }
+    catch (error) {
+        console.error(error)
+        res.status(500).json({ error: "Something went wrong" })
     }
 })
 
