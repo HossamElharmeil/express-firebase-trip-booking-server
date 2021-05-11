@@ -12,10 +12,13 @@
   },
   "dependencies": {
     "express": "^4.17.1",
+    "firebase": "^8.5.0",
     "firebase-admin": "^9.7.0",
     "nodemon": "^2.0.7"
   },
   "devDependencies": {
-    "@google-cloud/firestore": "^4.11.0"
+    "@firebase/auth-types": "^0.10.3",
+    "@google-cloud/firestore": "^4.11.0",
+    "@types/firebase": "^3.2.1"
   }
 }

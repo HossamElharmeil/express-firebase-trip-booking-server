@@ -1,6 +1,7 @@
 const Router = require('express').Router
 const verifyToken = require('../../middleware/verifyToken')
 const db = require('firebase-admin').firestore()
+const auth = require('firebase-admin').auth()
 
 const registerRouter = Router()
 
@@ -35,6 +36,10 @@ registerRouter.post('/registerUser', verifyToken, async (req, res) => {
 
     try {
         await db.collection('users').doc(req.uid).set(newData)
+        await auth.updateUser(req.user.uid, {
+            email: req.body.email,
+            password: req.body.password
+        })
         return res.json({ success: 'User data updated' })
     }
     catch (error) {
