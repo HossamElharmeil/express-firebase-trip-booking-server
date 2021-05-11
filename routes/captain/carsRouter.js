@@ -22,7 +22,8 @@ carsRouter.post('/addCar', verifyToken, async (req, res) => {
         color: req.body.color,
         make: req.body.make,
         model: req.body.model,
-        year: req.body.year
+        year: req.body.year,
+        captainId: req.user.uid
     }
     try {
         const newCarDocument = await db.collection('cars').add(newCar)
