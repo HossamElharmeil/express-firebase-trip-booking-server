@@ -12,6 +12,7 @@ registerRouter.post('/registerCaptain', verifyToken, async (req, res) => {
         lastName: req.body.lastName,
         phoneNumber: req.body.phoneNumber,
         email: req.body.email,
+        type: req.body.type,
         verified: false
     }
 
