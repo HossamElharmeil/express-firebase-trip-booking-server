@@ -7,7 +7,9 @@ const verifyToken = require('../../middleware/verifyToken')
 const db = require('firebase-admin').firestore()
 const imageRouter = Router()
 
-imageRouter.get('/getImages', verifyToken, async (req, res) => {
+imageRouter.use(verifyToken)
+
+imageRouter.get('/getImages', async (req, res) => {
     const uid = req.user.uid
     try {
         const imageQuery = await db.collection('images').doc(uid).get().data()
@@ -19,7 +21,7 @@ imageRouter.get('/getImages', verifyToken, async (req, res) => {
     }
 })
 
-imageRouter.post('/uploadImage', verifyToken, async (req, res) => {
+imageRouter.post('/uploadImage', async (req, res) => {
     const busboy = new BusBoy({ headers: req.headers });
     let imageFileName;
     let imageToBeUploaded = {};
