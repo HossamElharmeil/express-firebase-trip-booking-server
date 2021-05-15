@@ -1,10 +1,13 @@
 const BusBoy = require('busboy')
-const path = require('path')
-const os = require('os')
-const fs = require('fs')
+const config = require('../../util/config').firebaseConfig
 const Router = require('express').Router
+const fs = require('fs')
+const os = require('os')
+const path = require('path')
 const verifyToken = require('../../middleware/verifyToken')
+
 const db = require('firebase-admin').firestore()
+
 const imageRouter = Router()
 
 imageRouter.use(verifyToken)
