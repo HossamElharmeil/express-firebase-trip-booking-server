@@ -1,6 +1,6 @@
 const admin = require('firebase-admin')
 
-module.exports = async (req, res, next) => {
+const verifyToken = async (req, res, next) => {
     let idToken
     if (req.headers.authorization == null || !req.headers.authorization.startsWith('Bearer ')) {
         console.log('Unrecognized token format')
@@ -19,3 +19,5 @@ module.exports = async (req, res, next) => {
         return res.status(403).json(error)
     }
 }
+
+module.exports = verifyToken
