@@ -6,7 +6,7 @@ const getRouter = Router()
 
 getRouter.use(verifyToken)
 
-registerRouter.get('/getUser', async (req, res) => {
+getRouter.get('/getUser', async (req, res) => {
     const uid = req.user.uid
 
     try {
@@ -25,7 +25,7 @@ registerRouter.get('/getUser', async (req, res) => {
     }
 })
 
-registerRouter.get('/getCaptain', async (req, res) => {
+getRouter.get('/getCaptain', async (req, res) => {
     const uid = req.user.uid
 
     try {
