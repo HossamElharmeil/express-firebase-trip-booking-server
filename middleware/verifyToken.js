@@ -2,9 +2,12 @@ const auth = require('firebase-admin').auth()
 
 const verifyToken = async (req, res, next) => {
     const token = req.get('Authorization').split('Bearer ')[1]
+    console.log(token)
 
-    if (!token || !token.startsWith('Bearer ')) 
+    if (!token || !token.startsWith('Bearer ')) {
+        console.log(token)
         return res.status(403).json({ error: 'Authorization failed' })
+    }
     
     try {
         const user = await auth.verifyIdToken(token)
@@ -12,6 +15,7 @@ const verifyToken = async (req, res, next) => {
         return next()
     }
     catch (error) {
+        console.log(token)
         return res.status(403).json({ error: 'Authorization failed' })
     }
 }
