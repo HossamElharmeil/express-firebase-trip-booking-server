@@ -15,7 +15,7 @@ getRouter.get('/getUser', async (req, res) => {
             return res.status(404).json({ result: 'User not found' })
         }
         else {
-            const user = usersQuery.docs[1].data()
+            const user = usersQuery.docs[0].data()
             return res.json({ user })
         }
     }
@@ -34,7 +34,7 @@ getRouter.get('/getCaptain', async (req, res) => {
             return res.status(404).json({ result: 'Captain not found' })
         }
         else {
-            const captain = usersQuery.docs[1].data()
+            const captain = usersQuery.docs[0].data()
             return res.json({ captain })
         }
     }

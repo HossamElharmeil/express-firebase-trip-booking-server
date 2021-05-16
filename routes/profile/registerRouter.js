@@ -24,7 +24,7 @@ registerRouter.post('/registerCaptain', async (req, res) => {
     }
     catch (error) {
         console.error(error);
-        return res.status(500).json({ error: 'Something went wrong' })
+        return res.status(500).json({ message: error.message, code: error.code })
     }
 })
 
