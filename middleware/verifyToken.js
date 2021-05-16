@@ -1,7 +1,7 @@
 const auth = require('firebase-admin').auth()
 
 const verifyToken = async (req, res, next) => {
-    console.log(req.get('Authorizattion'))
+    console.log(req.get('Authorization'))
 
     const token = req.get('Authorization').split('Bearer ')[1]
 
