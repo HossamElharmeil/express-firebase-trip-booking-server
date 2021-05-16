@@ -15,7 +15,6 @@ authRouter.post('/verifyPassword', verifyToken, async (req, res) => {
         res.json({ token })
     }
     catch (error) {
-        console.error(error)
         res.status(403).json({ error: 'Authentication failed' })
     }
 })

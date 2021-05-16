@@ -17,7 +17,7 @@ registerRouter.post('/registerCaptain', verifyToken, async (req, res) => {
     }
 
     try {
-        await db.collection('captains').doc(req.uid).set(newData)
+        await db.collection('captains').doc(req.user.uid).set(newData)
         return res.json({ success: 'Captain data updated' })
     }
     catch (error) {
@@ -36,7 +36,7 @@ registerRouter.post('/registerUser', verifyToken, async (req, res) => {
     }
 
     try {
-        await db.collection('users').doc(req.uid).set(newData)
+        await db.collection('users').doc(req.user.uid).set(newData)
         await auth.updateUser(req.user.uid, {
             email: req.body.email,
             password: req.body.password

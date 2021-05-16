@@ -25,6 +25,8 @@ imageRouter.get('/getImages', async (req, res) => {
 })
 
 imageRouter.post('/uploadImage', async (req, res) => {
+    const uid = req.user.uid
+
     const busboy = new BusBoy({ headers: req.headers });
     let imageFileName;
     let imageToBeUploaded = {};
@@ -59,10 +61,10 @@ imageRouter.post('/uploadImage', async (req, res) => {
                 ${imageFileName}
                 ?alt=media`
             
-            const imageQuery = await db.collection('images').doc(req.user.uid).get().data()
+            const imageQuery = await db.collection('images').doc(uid).get().data()
             const images = imageQuery.images || []
             images.concat([imageUrl])
-            await db.collection('images').doc(req.user.uid).update({ images })
+            await db.collection('images').doc(uid).update({ images })
 
             return res.json({ message: 'Image uploaded successfully' })
         }
