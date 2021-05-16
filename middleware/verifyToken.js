@@ -1,8 +1,9 @@
 const auth = require('firebase-admin').auth()
 
 const verifyToken = async (req, res, next) => {
+    console.log(req.get('Authorizattion'))
+
     const token = req.get('Authorization').split('Bearer ')[1]
-    console.log(token)
 
     if (!token || !token.startsWith('Bearer ')) {
         console.log(token)
