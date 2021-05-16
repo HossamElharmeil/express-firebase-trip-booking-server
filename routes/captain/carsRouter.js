@@ -33,10 +33,10 @@ carsRouter.post('/addCar', verifyToken, async (req, res) => {
         const newCarId = newCarDocument.id
 
         const captain = (await db.collection('captains').doc(uid).get()).data()
-        const cars = captain.cars || []
+        const cars = captain ? captain.cars? captain.cars : [] : []
         cars.concat([newCarId])
 
-        await db.collection('captains').doc(uid).set({ cars })
+        await db.collection('captains').doc(uid).update({ cars })
     }
     catch (error) {
         console.error(error)

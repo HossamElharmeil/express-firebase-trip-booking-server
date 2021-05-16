@@ -7,10 +7,11 @@ const path = require('path')
 const verifyToken = require('../../middleware/verifyToken')
 
 const db = require('firebase-admin').firestore()
+const storage = require('firebase-admin').storage()
 
 const imageRouter = Router()
 
-imageRouter.use(verifyToken)
+//imageRouter.use(verifyToken)
 
 imageRouter.get('/getImages', async (req, res) => {
     const uid = req.user.uid
@@ -25,28 +26,31 @@ imageRouter.get('/getImages', async (req, res) => {
 })
 
 imageRouter.post('/uploadImage', async (req, res) => {
-    const uid = req.user.uid
+    const uid = 'hossz'
 
-    const busboy = new BusBoy({ headers: req.headers });
-    let imageFileName;
-    let imageToBeUploaded = {};
+    req.headers['content-type'] = 'multipart/form-data; boundary="XXX"'
+
+    const busboy = new BusBoy({ headers: req.headers })
+    let imageFileName
+    let imageToBeUploaded = {}
 
     busboy.on('file',  (fieldname, file, filename, encoding, mimetype) => {
         if (mimetype !== 'image/png' && mimetype !== 'image/jpeg' && mimetype !== 'image/jpg') 
             return res.status(400).json({ error: 'Unsupported file format' })
         
-        const imageExtension = path.extname(filename);
+        const imageExtension = path.extname(filename)
         imageFileName = `${Math.round(Math.random() * 100000000000)}${imageExtension}`
         const filepath = path.join(os.tmpdir(), imageFileName)
 
         imageToBeUploaded = { filepath, mimetype }
+        console.log(imageToBeUploaded)
 
         file.pipe(fs.createWriteStream(filepath))
     });
 
     busboy.on('finish', async () => {
         try {
-            await admin.storage().bucket(config.storageBucket).upload(imageToBeUploaded.filepath, {
+            await storage.bucket(config.storageBucket).upload(imageToBeUploaded.filepath, {
                 resumable: false,
                 metadata: {
                     metadata: {
@@ -66,7 +70,7 @@ imageRouter.post('/uploadImage', async (req, res) => {
             images.concat([imageUrl])
             await db.collection('images').doc(uid).update({ images })
 
-            return res.json({ message: 'Image uploaded successfully' })
+            return res.json({ message: 'Image uploaded successfully', imageUrl })
         }
         catch (error) {
             console.error(error);
