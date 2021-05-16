@@ -27,6 +27,8 @@ registerRouter.post('/registerCaptain', verifyToken, async (req, res) => {
 })
 
 registerRouter.post('/registerUser', verifyToken, async (req, res) => {
+    console.log(req.body)
+
     const newData = {
         uid: req.user.uid,
         firstName: req.body.firstName,
