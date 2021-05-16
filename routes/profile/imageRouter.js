@@ -32,7 +32,7 @@ imageRouter.post('/uploadImage', async (req, res) => {
     let imageToBeUploaded = {};
 
     busboy.on('file',  (fieldname, file, filename, encoding, mimetype) => {
-        if (mimetype !== 'image/png' && mimetype !== 'image/jpeg') 
+        if (mimetype !== 'image/png' && mimetype !== 'image/jpeg' && mimetype !== 'image/jpg') 
             return res.status(400).json({ error: 'Unsupported file format' })
         
         const imageExtension = path.extname(filename);
