@@ -605,7 +605,7 @@ buffer-equal-constant-time@1.0.1:
   resolved "https://registry.yarnpkg.com/buffer-equal-constant-time/-/buffer-equal-constant-time-1.0.1.tgz#f8e71132f7ffe6e01a5c9697a4c6f3e48d5cc819"
   integrity sha1-+OcRMvf/5uAaXJaXpMbz5I1cyBk=
 
-busboy@^0.3.1:
+busboy@*, busboy@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/busboy/-/busboy-0.3.1.tgz#170899274c5bf38aae27d5c62b71268cd585fd1b"
   integrity sha512-y7tTxhGKXcyBxRKAni+awqx8uqaJKrSFSNFSeRG5CsWNdmy2BIK+6VGWEW7TZnIO/533mtMEA4rOevQV815YJw==
@@ -719,6 +719,13 @@ configstore@^5.0.0, configstore@^5.0.1:
     unique-string "^2.0.0"
     write-file-atomic "^3.0.0"
     xdg-basedir "^4.0.0"
+
+connect-busboy@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/connect-busboy/-/connect-busboy-0.0.2.tgz#ac5c9c96672171885e576c66b2bfd95d3bb11097"
+  integrity sha1-rFyclmchcYheV2xmsr/ZXTuxEJc=
+  dependencies:
+    busboy "*"
 
 content-disposition@0.5.3:
   version "0.5.3"

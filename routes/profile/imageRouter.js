@@ -11,7 +11,7 @@ const storage = require('firebase-admin').storage()
 
 const imageRouter = Router()
 
-//imageRouter.use(verifyToken)
+imageRouter.use(verifyToken)
 
 imageRouter.get('/getImages', async (req, res) => {
     const uid = req.user.uid
@@ -26,10 +26,8 @@ imageRouter.get('/getImages', async (req, res) => {
 })
 
 imageRouter.post('/uploadImage', async (req, res) => {
-    const uid = 'hossz'
-
-    req.headers['content-type'] = 'multipart/form-data; boundary="XXX"'
-
+    const uid = req.user.uid
+    
     const busboy = new BusBoy({ headers: req.headers })
     let imageFileName
     let imageToBeUploaded = {}
@@ -43,7 +41,6 @@ imageRouter.post('/uploadImage', async (req, res) => {
         const filepath = path.join(os.tmpdir(), imageFileName)
 
         imageToBeUploaded = { filepath, mimetype }
-        console.log(imageToBeUploaded)
 
         file.pipe(fs.createWriteStream(filepath))
     });
@@ -59,24 +56,20 @@ imageRouter.post('/uploadImage', async (req, res) => {
                 }
             })
             const imageUrl =
-                `https://firebasestorage.googleapis.com/v0/b/
-                ${config.storageBucket}
-                /o/
-                ${imageFileName}
-                ?alt=media`
+                `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${imageFileName}?alt=media`
             
-            const imageQuery = await db.collection('images').doc(uid).get().data()
-            const images = imageQuery.images || []
+            const imageQuery = (await db.collection('images').doc(uid).get()).data()
+            const images = imageQuery? imageQuery.images ? imageQuery.images : [] : []
             images.concat([imageUrl])
-            await db.collection('images').doc(uid).update({ images })
+            await db.collection('images').doc(uid).set({ images })
 
             return res.json({ message: 'Image uploaded successfully', imageUrl })
         }
         catch (error) {
-            console.error(error);
+            console.error(error)
             return res.status(500).json({ error: 'Something went wrong' })
         }
-    });
+    })
     
     req.pipe(busboy)
 })
