@@ -1,20 +1,18 @@
-const admin = require('firebase-admin')
+const auth = require('firebase-admin').auth()
 
 const verifyToken = async (req, res, next) => {
-    let idToken
-    if (req.headers.authorization == null || !req.headers.authorization.startsWith('Bearer ')) {
-        return res.status(400).json({ error: 'Unrecognized token format' })
-    }
-    else {
-        idToken = req.headers.authorization.split('Bearer ')[1]
-    }
+    const token = req.get('Authorization').split('Bearer ')[1]
+
+    if (!token || !token.startsWith('Bearer ')) 
+        return res.status(403).json({ error: 'Authorization failed' })
+    
     try {
-        const decodedToken = await admin.auth().verifyIdToken(idToken)
-        req.user = decodedToken
+        const user = await auth.verifyIdToken(token)
+        req.user = user
         return next()
     }
     catch (error) {
-        return res.status(403).json(error)
+        return res.status(403).json({ error: 'Authorization failed' })
     }
 }
 
