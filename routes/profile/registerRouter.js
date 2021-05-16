@@ -5,7 +5,9 @@ const auth = require('firebase-admin').auth()
 
 const registerRouter = Router()
 
-registerRouter.post('/registerCaptain', verifyToken, async (req, res) => {
+registerRouter.use(verifyToken)
+
+registerRouter.post('/registerCaptain', async (req, res) => {
     const newData = {
         uid: req.user.uid,
         firstName: req.body.firstName,
@@ -26,9 +28,7 @@ registerRouter.post('/registerCaptain', verifyToken, async (req, res) => {
     }
 })
 
-registerRouter.post('/registerUser', verifyToken, async (req, res) => {
-    console.log(req.body)
-
+registerRouter.post('/registerUser', async (req, res) => {
     const newData = {
         uid: req.user.uid,
         firstName: req.body.firstName,
