@@ -14,12 +14,18 @@ registerRouter.post('/registerCaptain', async (req, res) => {
         lastName: req.body.lastName,
         phoneNumber: req.body.phoneNumber,
         email: req.body.email,
+        password: req.body.password,
         type: req.body.type,
         verified: false
     }
 
     try {
         await db.collection('captains').doc(req.user.uid).set(newData)
+        await auth.updateUser(req.user.uid, {
+            email: newData.email,
+            password: newData.password
+        })
+
         return res.json({ success: 'Captain data updated' })
     }
     catch (error) {

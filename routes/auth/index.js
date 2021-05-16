@@ -3,6 +3,6 @@ const authRouter = require('./authRouter')
 
 const router = express()
 
-router.use( authRouter)
+router.use(authRouter)
 
 module.exports = router
