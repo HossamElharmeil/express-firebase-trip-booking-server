@@ -43,12 +43,13 @@ tripsRouter.post('/reserveTrip', async (req, res) => {
 tripsRouter.post('/rateTrip', async (req, res) => {
     const tripId = req.body.tripId
     const rating = req.body.rating
+    const review = req.body.review
     
     try {
         const trip = (await db.collection('trips').doc(tripId).get()).data()
 
         if (trip.captainId === req.user.uid && trip.status === 'finished') {
-            await db.collection('trips').doc(tripId).update({ rating })
+            await db.collection('trips').doc(tripId).update({ rating, review })
             res.json({ success: 'Rating added successfully' })
         }
         else {

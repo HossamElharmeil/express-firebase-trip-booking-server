@@ -61,7 +61,7 @@ imageRouter.post('/uploadImage', async (req, res) => {
             const imageQuery = (await db.collection('images').doc(uid).get()).data()
             const images = imageQuery? imageQuery.images ? imageQuery.images : [] : []
             images.concat([imageUrl])
-            await db.collection('images').doc(uid).set({ images })
+            await db.collection('images').doc(uid).update({ images })
 
             return res.json({ message: 'Image uploaded successfully', imageUrl })
         }
