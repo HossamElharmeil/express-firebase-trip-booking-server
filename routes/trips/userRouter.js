@@ -10,7 +10,7 @@ tripsRouter.use(verifyToken)
 tripsRouter.post('/reserveTrip', async (req, res) => {
     const newTrip = {
         user: req.user.uid,
-        captain: req.body.captainId,
+        captainId: req.body.captainId,
         status: 'new',
         pickup: req.body.pickup,
         dropoff: req.body.dropoff,
