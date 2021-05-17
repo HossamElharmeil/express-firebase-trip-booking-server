@@ -37,15 +37,15 @@ tripsRouter.post('/reserveTrip', async (req, res) => {
 
             await db.collection('captains').doc(req.body.captainId).update({ available: false })
 
-            res.json({ success: 'Trip added successfully', newTrip })
+            return res.json({ success: 'Trip added successfully', newTrip })
         }
         else {
-            res.json({ error: 'Captain reserved'})
+            return res.json({ error: 'Captain reserved'})
         }
     }
     catch (error) {
         console.error(error)
-        res.status(500).json({ error: 'Something went wrong' })
+        return res.status(500).json({ error: 'Something went wrong' })
     }
 })
 
@@ -59,15 +59,42 @@ tripsRouter.post('/rateTrip', async (req, res) => {
 
         if (trip.captainId === req.user.uid && trip.status === 'finished') {
             await db.collection('trips').doc(tripId).update({ rating, review })
-            res.json({ success: 'Rating added successfully' })
+            return res.json({ success: 'Rating added successfully' })
         }
         else {
-            res.status(403).json({ error: 'Unauthorized operation' })
+            return res.status(403).json({ error: 'Unauthorized operation' })
         }
     }
     catch (error) {
         console.error(error)
-        res.status(500).json({ error: 'Something went wrong' })
+        return res.status(500).json({ error: 'Something went wrong' })
+    }
+})
+
+tripsRouter.post('/addCuppon', async (req, res) => {
+    const cupponCode = req.body.code
+    const tripId = req.body.tripId
+
+    try {
+        const cupponQuery = await db.collection('cuppons').where('code', '==', cupponCode).get()
+
+        if (cupponQuery.docs.length === 0) {
+            return res.status(404).json({ error: 'Invalid cuppon' })
+        }
+        else {
+            const cupponData = cupponQuery.docs[0].data()
+            const tripData = (await db.collection('trips').doc(tripId).get()).data()
+
+            const estimatePrice = tripData.estimatePrice - tripData.estimatePrice * cupponData.percentage
+
+            await db.collection('trips').doc(tripId).update({ estimatePrice })
+
+            return res.json({ success: 'Cuppon added' })
+        }
+    }
+    catch (error) {
+        console.error(error)
+        return res.status(500).json({ error: 'Something went wrong' })
     }
 })
 
