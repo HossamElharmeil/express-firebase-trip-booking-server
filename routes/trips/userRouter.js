@@ -16,13 +16,18 @@ tripsRouter.post('/reserveTrip', async (req, res) => {
         dropoff: req.body.dropoff,
         type: req.body.type,
         rating: 0,
+        notes: req.body.notes || '',
         createdAt: toISOString(Date.now())
     }
 
     try {
         const captain = (await db.collection('captains').doc(req.body.captainId).get()).data()
 
-        if (captain.available === true) {
+        if (!captain) {
+            return res.status(404).json({ error: 'Captain not found' })
+        }
+
+        if ((captain.available || false) === true) {
             const newTripDocument = await db.collection('trips').add(newTrip)
             const id = newTripDocument.id
 
@@ -43,7 +48,7 @@ tripsRouter.post('/reserveTrip', async (req, res) => {
 tripsRouter.post('/rateTrip', async (req, res) => {
     const tripId = req.body.tripId
     const rating = req.body.rating
-    const review = req.body.review
+    const review = req.body.review || ''
     
     try {
         const trip = (await db.collection('trips').doc(tripId).get()).data()
