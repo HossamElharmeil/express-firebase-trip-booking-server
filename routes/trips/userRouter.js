@@ -1,12 +1,13 @@
 const db = require('firebase-admin').firestore()
 const verifyToken = require("../../middleware/verifyToken")
+const toISOString = require('isodate-lite').convertDatesToISOStrings
 
-const Router = rquire('express').Router
+const Router = require('express').Router
 
 const tripsRouter = Router()
 tripsRouter.use(verifyToken)
 
-tripsRouter.post('/reserveTrip', (req, res) => {
+tripsRouter.post('/reserveTrip', async (req, res) => {
     const newTrip = {
         user: req.user.uid,
         captain: req.body.captainId,
@@ -15,15 +16,15 @@ tripsRouter.post('/reserveTrip', (req, res) => {
         dropoff: req.body.dropoff,
         type: req.body.type,
         rating: 0,
-        createdAt: Date.toISOString(Date.now())
+        createdAt: toISOString(Date.now())
     }
 
     try {
-        const captain = await db.collection('captains').doc(req.body.captainId).get().data()
+        const captain = (await db.collection('captains').doc(req.body.captainId).get()).data()
 
         if (captain.available === true) {
-            const newTrip = await db.collection('trips').add(newTrip)
-            const id = newTrip.id
+            const newTripDocument = await db.collection('trips').add(newTrip)
+            const id = newTripDocument.id
 
             await db.collection('captains').doc(req.body.captainId).update({ available: false })
 
@@ -39,7 +40,7 @@ tripsRouter.post('/reserveTrip', (req, res) => {
     }
 })
 
-tripsRouter.post('/rateTrip', (req, res) => {
+tripsRouter.post('/rateTrip', async (req, res) => {
     const tripId = req.body.tripId
     const rating = req.body.rating
     

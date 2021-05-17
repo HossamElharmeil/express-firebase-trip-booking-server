@@ -1,4 +1,4 @@
-const Router = rquire('express').Router
+const Router = require('express').Router
 const trips = Router()
 
 const captainRouter = require('./captainRouter')

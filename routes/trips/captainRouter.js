@@ -1,12 +1,12 @@
 const db = require('firebase-admin').firestore()
 const verifyToken = require("../../middleware/verifyToken")
 
-const Router = rquire('express').Router
+const Router = require('express').Router
 
 const captainRouter = Router()
 captainRouter.use(verifyToken)
 
-captainRouter.put('/acceptTrip', (req, res) => {
+captainRouter.put('/acceptTrip', async (req, res) => {
     const tripId = req.body.tripId
     
     try {
@@ -25,7 +25,7 @@ captainRouter.put('/acceptTrip', (req, res) => {
     }
 })
 
-captainRouter.put('/rejectTrip', (req, res) => {
+captainRouter.put('/rejectTrip', async (req, res) => {
     const tripId = req.body.tripId
     
     try {
@@ -46,7 +46,7 @@ captainRouter.put('/rejectTrip', (req, res) => {
     }
 })
 
-captainRouter.put('/finishTrip', (req, res) => {
+captainRouter.put('/finishTrip', async (req, res) => {
     const tripId = req.body.tripId
     
     try {
