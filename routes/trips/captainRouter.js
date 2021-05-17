@@ -67,4 +67,24 @@ captainRouter.put('/finishTrip', async (req, res) => {
     }
 })
 
+captainRouter.put('/startTrip', async (req, res) => {
+    const tripId = req.body.tripId
+    
+    try {
+        const trip = (await db.collection('trips').doc(tripId).get()).data()
+        if (trip.captainId === req.user.uid) {
+            await db.collection('trips').doc(tripId).update({ status: 'started' })
+            
+            res.json({ success: 'Trip started successfully' })
+        }
+        else {
+            res.status(403).json({ error: 'Unauthorized operation' })
+        }
+    }
+    catch (error) {
+        console.error(error)
+        res.status(500).json({ error: 'Something went wrong' })
+    }
+})
+
 module.exports = captainRouter
