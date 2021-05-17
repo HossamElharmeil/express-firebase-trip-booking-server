@@ -1,6 +1,7 @@
 const db = require('firebase-admin').firestore()
 const verifyToken = require("../../middleware/verifyToken")
 const toISOString = require('isodate-lite').convertDatesToISOStrings
+const estimatePrice = require('./util/estimatePrice')
 
 const Router = require('express').Router
 
@@ -8,8 +9,7 @@ const tripsRouter = Router()
 tripsRouter.use(verifyToken)
 
 tripsRouter.post('/reserveTrip', async (req, res) => {
-    const newTrip = {
-        user: req.user.uid,
+    let newTrip = {
         captainId: req.body.captainId,
         status: 'new',
         pickup: req.body.pickup,
@@ -17,11 +17,15 @@ tripsRouter.post('/reserveTrip', async (req, res) => {
         type: req.body.type,
         rating: 0,
         notes: req.body.notes || '',
+        estimatePrice: estimatePrice(req.body.dropoff, req.body.pickup),
         createdAt: toISOString(Date.now())
     }
 
     try {
         const captain = (await db.collection('captains').doc(req.body.captainId).get()).data()
+        const user = (await db.collection('users').doc(req.user.uid).get()).data()
+
+        newTrip.user = user
 
         if (!captain) {
             return res.status(404).json({ error: 'Captain not found' })
@@ -29,11 +33,11 @@ tripsRouter.post('/reserveTrip', async (req, res) => {
 
         if ((captain.available || false) === true) {
             const newTripDocument = await db.collection('trips').add(newTrip)
-            const id = newTripDocument.id
+            newTrip.id = newTripDocument.id
 
             await db.collection('captains').doc(req.body.captainId).update({ available: false })
 
-            res.json({ success: 'Trip added successfully', id })
+            res.json({ success: 'Trip added successfully', newTrip })
         }
         else {
             res.json({ error: 'Captain reserved'})
