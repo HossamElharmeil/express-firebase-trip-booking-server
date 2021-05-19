@@ -9,7 +9,7 @@ registerRouter.use(verifyToken)
 
 registerRouter.post('/registerCaptain', async (req, res) => {
     const newData = {
-        uid: req.user.uid,
+        captainId: req.user.uid,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         phoneNumber: req.body.phoneNumber,

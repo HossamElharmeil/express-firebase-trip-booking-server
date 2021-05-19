@@ -11,6 +11,8 @@ authRouter.post('/verifyPassword', verifyToken, async (req, res) => {
     const collection = req.body.collection
     const registrationToken = req.body.registrationToken
 
+    console.log(registrationToke)
+
     try {
         const userCredential = await auth.signInWithEmailAndPassword(email, password)
         const token = await userCredential.user.getIdToken()
