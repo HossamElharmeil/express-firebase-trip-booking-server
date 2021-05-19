@@ -2,6 +2,7 @@ const db = require('firebase-admin').firestore()
 const verifyToken = require("../../middleware/verifyToken")
 const toISOString = require('isodate-lite').convertDatesToISOStrings
 const estimatePrice = require('./util/estimatePrice')
+const messagingService = require('../../services/index').messaging
 
 const Router = require('express').Router
 
@@ -36,6 +37,10 @@ tripsRouter.post('/reserveTrip', async (req, res) => {
             newTrip.id = newTripDocument.id
 
             await db.collection('captains').doc(req.body.captainId).update({ available: false })
+            await messagingService.sendMessage(user.registrationToken, {
+                type: 'new_trip',
+                trip: newTrip
+            })
 
             return res.json({ success: 'Trip added successfully', newTrip })
         }

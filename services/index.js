@@ -1,3 +1,3 @@
-import messaging from './messaging'
+const messaging = require('./messaging')
 
-export { messaging }
+exports.messaging = messaging
