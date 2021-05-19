@@ -1,17 +1,19 @@
 const PORT = process.env.PORT || 8080
 
 const express = require('express')
-const busboy = require('connect-busboy')
-const config = require('./util/config').firebaseConfig
 
 const admin = require('firebase-admin')
 admin.initializeApp()
+
 const firebase = require('firebase')
+const config = require('./util/config').firebaseConfig
 firebase.initializeApp(config)
 
-
 const app = express()
+
 app.use(express.json())
+
+const busboy = require('connect-busboy')
 app.use(busboy())
 
 app.listen(PORT, () => {
