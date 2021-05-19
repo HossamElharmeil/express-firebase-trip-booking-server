@@ -24,27 +24,31 @@ tripsRouter.post('/reserveTrip', async (req, res) => {
 
     try {
         const captain = (await db.collection('captains').doc(req.body.captainId).get()).data()
-        const user = (await db.collection('users').doc(req.user.uid).get()).data()
-
-        newTrip.user = user
-
         if (!captain) {
             return res.status(404).json({ error: 'Captain not found' })
         }
 
-        if ((captain.available || false) === true) {
+        const user = (await db.collection('users').doc(req.user.uid).get()).data()
+        newTrip.user = user
+
+        if (captain.available === true) {
             const newTripDocument = await db.collection('trips').add(newTrip)
             newTrip.id = newTripDocument.id
 
             await db.collection('captains').doc(req.body.captainId).update({ available: false })
             if (captain.registrationToken) {
                 await messagingService.sendMessage(captain.registrationToken, {
-                    type: 'new_trip',
                     notification: {
                         title: 'New Trip',
                         body: 'There is a new trip reservation waiting for you!'
                     },
-                    data: newTrip
+                    data: {
+                        captainId: req.body.captainId,
+                        status: 'new',
+                        type: req.body.type,
+                        notes: req.body.notes || '',
+                        createdAt: toISOString(Date.now()).toString()
+                    }
                 })
             }
 
