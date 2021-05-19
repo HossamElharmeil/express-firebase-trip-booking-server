@@ -40,7 +40,11 @@ tripsRouter.post('/reserveTrip', async (req, res) => {
             if (captain.registrationToken) {
                 await messagingService.sendMessage(captain.registrationToken, {
                     type: 'new_trip',
-                    trip: newTrip
+                    notification: {
+                        title: 'New Trip',
+                        body: 'There is a new trip reservation waiting for you!'
+                    },
+                    data: newTrip
                 })
             }
 
