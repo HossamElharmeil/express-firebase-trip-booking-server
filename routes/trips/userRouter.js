@@ -37,10 +37,12 @@ tripsRouter.post('/reserveTrip', async (req, res) => {
             newTrip.id = newTripDocument.id
 
             await db.collection('captains').doc(req.body.captainId).update({ available: false })
-            await messagingService.sendMessage(user.registrationToken, {
-                type: 'new_trip',
-                trip: newTrip
-            })
+            if (captain.registrationToken) {
+                await messagingService.sendMessage(captain.registrationToken, {
+                    type: 'new_trip',
+                    trip: newTrip
+                })
+            }
 
             return res.json({ success: 'Trip added successfully', newTrip })
         }
