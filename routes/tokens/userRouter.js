@@ -4,7 +4,7 @@ const verifyToken = require('../../middleware/verifyToken')
 
 const userRouter = Router()
 
-userRouter.post('/updateToken', verifyToken, (req, res) => {
+userRouter.post('/updateToken', verifyToken, async (req, res) => {
     const registrationToken = req.body.token
     const uid = req.user.uid
 

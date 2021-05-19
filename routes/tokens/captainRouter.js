@@ -4,7 +4,7 @@ const verifyToken = require('../../middleware/verifyToken')
 
 const captainRouter = Router()
 
-captainRouter.post('/updateToken', verifyToken, (req, res) => {
+captainRouter.post('/updateToken', verifyToken, async (req, res) => {
     const registrationToken = req.body.token
     const uid = req.user.uid
 
