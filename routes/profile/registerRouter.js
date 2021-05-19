@@ -16,6 +16,7 @@ registerRouter.post('/registerCaptain', async (req, res) => {
         email: req.body.email,
         password: req.body.password,
         type: req.body.type,
+        registrationToken: req.body.registrationToken,
         verified: false
     }
 
@@ -40,7 +41,8 @@ registerRouter.post('/registerUser', async (req, res) => {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         phoneNumber: req.body.phoneNumber,
-        email: req.body.email
+        email: req.body.email,
+        registrationToken: req.body.registrationToken
     }
 
     try {
