@@ -43,6 +43,8 @@ tripsRouter.post('/reserveTrip', async (req, res) => {
                         body: 'There is a new trip reservation waiting for you!'
                     },
                     data: {
+                        click_action: "FLUTTER_NOTIFICATION_CLICK",
+                        type: 'new_trip',
                         captainId: req.body.captainId,
                         status: 'new',
                         type: req.body.type,
