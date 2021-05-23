@@ -17,7 +17,7 @@ imageRouter.use(verifyToken)
 imageRouter.get('/getImages', async (req, res) => {
     const uid = req.user.uid
     try {
-        const imageQuery = await db.collection('images').doc(uid).get().data()
+        const imageQuery = (await db.collection('images').doc(uid).get()).data()
         res.json(imageQuery)
     }
     catch (error) {
