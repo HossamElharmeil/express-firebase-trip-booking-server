@@ -1,4 +1,5 @@
 const db = require('firebase-admin').firestore()
+const auth = require('firebase-admin').auth()
 
 const verifyAdmin = async (req, res, next) => {
     let idToken
@@ -10,7 +11,7 @@ const verifyAdmin = async (req, res, next) => {
         idToken = req.headers.authorization.split('Bearer ')[1]
     }
     try {
-        const decodedToken = await admin.auth().verifyIdToken(idToken)
+        const decodedToken = await auth.verifyIdToken(idToken)
         req.user = decodedToken
 
         const adminQuery = await db.collection('admins').where('uid', '==', decodedToken.uid).get()

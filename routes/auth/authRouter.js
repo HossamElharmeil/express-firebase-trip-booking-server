@@ -32,7 +32,6 @@ authRouter.post('/loginWithEmail', async (req, res) => {
 
     try {
         const userCredential = await auth.signInWithEmailAndPassword(email, password)
-        console.log(userCredential)
         const token = await userCredential.user.getIdToken()
 
         res.json({ token })
