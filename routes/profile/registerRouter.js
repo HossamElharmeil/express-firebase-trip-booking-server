@@ -24,7 +24,8 @@ registerRouter.post('/registerCaptain', async (req, res) => {
         await db.collection('captains').doc(req.user.uid).set(newData)
         await auth.updateUser(req.user.uid, {
             email: newData.email,
-            password: newData.password
+            password: newData.password,
+            displayName: `${newData.firstName} ${newData.lastName}`
         })
 
         return res.json({ success: 'Captain data updated' })
