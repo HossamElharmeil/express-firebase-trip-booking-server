@@ -105,12 +105,12 @@ imageRouter.post('/uploadProfile', (req, res) => {
                     }
                 }
             })
-            const imageUrl =
+            const photoUrl =
                 `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${imageFileName}?alt=media`
             
-            auth.updateUser(uid, { imageUrl })
+            auth.updateUser(uid, { photoUrl })
 
-            return res.json({ message: 'Image uploaded successfully', imageUrl })
+            return res.json({ message: 'Image uploaded successfully', photoUrl })
         }
         catch (error) {
             console.error(error)
