@@ -9,6 +9,25 @@ const Router = require('express').Router
 const userRouter = Router()
 userRouter.use(verifyToken)
 
+userRouter.get('/getPreviousTrips', async (req, res) => {
+    const uid = req.user.uid
+
+    try {
+        const tripsQuery = await db.collection('trips')
+            .where('user.uid', '==', uid)
+            .where('status', '==', 'finished')
+            .get()
+
+        const trips = tripsQuery.docs.map(trip => trip.data())
+
+        res.json({ trips })
+    }
+    catch (error) {
+        console.error(error)
+        res.status(500).json({ error: 'Something went wrong' })
+    }
+})
+
 userRouter.post('/reserveTrip', async (req, res) => {
     let newTrip = {
         captainId: req.body.captainId,
