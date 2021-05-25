@@ -9,6 +9,7 @@ const notifications = require('./notifications')
 const profile = require('./profile')
 const tokens = require('./tokens')
 const trips = require('./trips')
+const wallet = require('./wallet')
 
 routes.use('/admin', admin)
 routes.use('/auth', auth)
@@ -17,5 +18,6 @@ routes.use('/notifications', notifications)
 routes.use('/profile', profile)
 routes.use('/tokens', tokens)
 routes.use('/trips', trips)
+routes.use('/wallet', wallet)
 
 module.exports = routes
