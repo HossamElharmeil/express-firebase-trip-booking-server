@@ -6,10 +6,10 @@ const messagingService = require('../../services/index').messaging
 
 const Router = require('express').Router
 
-const tripsRouter = Router()
-tripsRouter.use(verifyToken)
+const userRouter = Router()
+userRouter.use(verifyToken)
 
-tripsRouter.post('/reserveTrip', async (req, res) => {
+userRouter.post('/reserveTrip', async (req, res) => {
     let newTrip = {
         captainId: req.body.captainId,
         status: 'new',
@@ -66,7 +66,7 @@ tripsRouter.post('/reserveTrip', async (req, res) => {
     }
 })
 
-tripsRouter.post('/rateTrip', async (req, res) => {
+userRouter.post('/rateTrip', async (req, res) => {
     const tripId = req.body.tripId
     const rating = req.body.rating
     const review = req.body.review || ''
@@ -88,7 +88,7 @@ tripsRouter.post('/rateTrip', async (req, res) => {
     }
 })
 
-tripsRouter.post('/addCuppon', async (req, res) => {
+userRouter.post('/addCuppon', async (req, res) => {
     const cupponCode = req.body.code
     const tripId = req.body.tripId
 
@@ -115,4 +115,6 @@ tripsRouter.post('/addCuppon', async (req, res) => {
     }
 })
 
-module.exports = tripsRouter
+
+
+module.exports = userRouter
