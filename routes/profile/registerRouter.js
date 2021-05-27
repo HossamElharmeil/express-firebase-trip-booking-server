@@ -43,6 +43,7 @@ registerRouter.post('/registerUser', async (req, res) => {
         lastName: req.body.lastName,
         phoneNumber: req.body.phoneNumber,
         email: req.body.email,
+        points: 0,
         registrationToken: req.body.registrationToken
     }
 
