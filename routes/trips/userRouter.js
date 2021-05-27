@@ -86,15 +86,28 @@ userRouter.post('/reserveTrip', async (req, res) => {
 })
 
 userRouter.post('/rateTrip', async (req, res) => {
+    const uid = req.user.uid
     const tripId = req.body.tripId
     const rating = req.body.rating
     const review = req.body.review || ''
     
     try {
         const trip = (await db.collection('trips').doc(tripId).get()).data()
+        const captain = (await db.collection('captains').doc(uid).get()).data()
 
         if (trip.captainId === req.user.uid && trip.status === 'finished') {
             await db.collection('trips').doc(tripId).update({ rating, review })
+            
+            const newSum = captain.ratingSum ?? 0 + rating
+            const newCount = captain.ratingCount ?? 0 + 1
+            const newAverage = newSum / newCount
+
+            await db.collection('captains').doc(uid).update({
+                ratingAverage: newAverage,
+                ratingSum: newSum,
+                ratingCount: newCount
+            })
+            
             return res.json({ success: 'Rating added successfully' })
         }
         else {
