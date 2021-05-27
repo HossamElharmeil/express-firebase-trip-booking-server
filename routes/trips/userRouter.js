@@ -49,6 +49,7 @@ userRouter.post('/reserveTrip', async (req, res) => {
 
         const user = (await db.collection('users').doc(req.user.uid).get()).data()
         newTrip.user = user
+        newTrip.captain = captain
 
         if (captain.available === true) {
             const newTripDocument = await db.collection('trips').add(newTrip)
