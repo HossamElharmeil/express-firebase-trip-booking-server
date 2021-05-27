@@ -7,6 +7,25 @@ const Router = require('express').Router
 const captainRouter = Router()
 captainRouter.use(verifyToken)
 
+captainRouter.get('/getPreviousTrips', async (req, res) => {
+    const uid = req.user.uid
+
+    try {
+        const tripsQuery = await db.collection('trips')
+            .where('captainId', '==', uid)
+            .where('status', '==', 'finished')
+            .get()
+
+        const trips = tripsQuery.docs.map(trip => trip.data())
+
+        res.json({ trips })
+    }
+    catch (error) {
+        console.error(error)
+        res.status(500).json({ error: 'Something went wrong' })
+    }
+})
+
 captainRouter.put('/acceptTrip', async (req, res) => {
     const tripId = req.body.tripId
     
