@@ -161,11 +161,13 @@ captainRouter.post('/toggleAvailable', async (req, res) => {
     const uid = req.user.uid
     try {
         const captain = (await db.collection('captains').doc(uid).get()).data()
-        await db.collection('captains').doc(uid).update({ available: !captain.available })
+        await db.collection('captains').doc(uid).update({ available: !captain.available ?? true })
+
+        return res.json({ success: "Toggle done successfully" })
     }
     catch (error) {
         console.error(error)
-        res.status(500).json({ error: 'Something went wrong' })
+        return res.status(500).json({ error: 'Something went wrong' })
     }
 })
 
