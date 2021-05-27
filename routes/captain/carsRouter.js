@@ -21,7 +21,7 @@ carsRouter.get('/getCars', verifyToken, async (req, res) => {
 carsRouter.post('/addCar', verifyToken, async (req, res) => {
     const uid = req.user.uid
 
-    const newCar = {
+    const car = {
         color: req.body.color,
         make: req.body.make,
         model: req.body.model,
@@ -29,14 +29,8 @@ carsRouter.post('/addCar', verifyToken, async (req, res) => {
         captainId: uid
     }
     try {
-        const newCarDocument = await db.collection('cars').add(newCar)
-        const newCarId = newCarDocument.id
-
-        const captain = (await db.collection('captains').doc(uid).get()).data()
-        const cars = captain ? captain.cars? captain.cars : [] : []
-        cars.concat([newCarId])
-
-        await db.collection('captains').doc(uid).update({ cars })
+        await db.collection('captains').doc(uid).update({ car })
+        return res.json({ success: 'Car updated successfully '})
     }
     catch (error) {
         console.error(error)
