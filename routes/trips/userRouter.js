@@ -86,6 +86,44 @@ userRouter.post('/reserveTrip', async (req, res) => {
     }
 })
 
+userRouter.put('/cancelTrip', async (req, res) => {
+    const tripId = req.body.tripId
+    
+    try {
+        const trip = (await db.collection('trips').doc(tripId).get()).data()
+        const captain = (await db.collection('captains').doc(trip.captainId).get()).data()
+
+        if (trip.user.uid === req.user.uid) {
+            await db.collection('trips').doc(tripId).update({ status: 'cancelled' })
+            await db.collection('captains').doc(trip.captainId).update({ available: true })
+
+            if (captain.registrationToken) {
+                await messaging.sendMessage(captain.registrationToken, {
+                    notification: {
+                        title: 'Trip Cancelled',
+                        body: 'Your trip has been cancelled by the user'
+                    },
+                    data: {
+                        click_action: "FLUTTER_NOTIFICATION_CLICK",
+                        type: 'trip_cancelled',
+                        captainId: req.body.captainId,
+                        tripId
+                    }
+                })
+            }
+
+            return res.json({ success: 'Trip cancelled successfully' })
+        }
+        else {
+            return res.status(403).json({ error: 'Unauthorized operation' })
+        }
+    }
+    catch (error) {
+        console.error(error)
+        return res.status(500).json({ error: 'Something went wrong' })
+    }
+})
+
 userRouter.post('/estimatePrice', (req, res) => {
     const pickup = req.body.pickup
     const dropoff = req.body.dropoff
