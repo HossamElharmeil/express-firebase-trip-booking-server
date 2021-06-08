@@ -128,9 +128,9 @@ userRouter.post('/estimatePrice', (req, res) => {
     const pickup = req.body.pickup
     const dropoff = req.body.dropoff
 
-    const estimatePrice = estimatePrice(pickup, dropoff);
+    const estimatePriceCalculation = estimatePrice(pickup, dropoff);
 
-    return res.json({ estimatePrice })
+    return res.json({ estimatePrice: estimatePriceCalculation })
 })
 
 userRouter.post('/rateTrip', async (req, res) => {
