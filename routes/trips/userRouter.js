@@ -86,6 +86,15 @@ userRouter.post('/reserveTrip', async (req, res) => {
     }
 })
 
+userRouter.post('/estimatePrice', (req, res) => {
+    const pickup = req.body.pickup
+    const dropoff = req.body.dropoff
+
+    const estimatePrice = estimatePrice(pickup, dropoff);
+
+    return res.json({ estimatePrice })
+})
+
 userRouter.post('/rateTrip', async (req, res) => {
     const uid = req.user.uid
     const tripId = req.body.tripId
