@@ -8,13 +8,15 @@ const registerRouter = Router()
 registerRouter.use(verifyToken)
 
 registerRouter.post('/registerCaptain', async (req, res) => {
+    const email = req.body.email
+    const password = req.body.password
+
     const newData = {
         captainId: req.user.uid,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         phoneNumber: req.body.phoneNumber,
-        email: req.body.email,
-        password: req.body.password,
+        email,
         type: req.body.type,
         registrationToken: req.body.registrationToken,
         verified: false
@@ -23,8 +25,8 @@ registerRouter.post('/registerCaptain', async (req, res) => {
     try {
         await db.collection('captains').doc(req.user.uid).set(newData)
         await auth.updateUser(req.user.uid, {
-            email: newData.email,
-            password: newData.password,
+            email: email,
+            password: password,
             displayName: `${newData.firstName} ${newData.lastName}`
         })
 
