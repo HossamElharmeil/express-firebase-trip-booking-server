@@ -42,4 +42,17 @@ authRouter.post('/loginWithEmail', async (req, res) => {
     }
 })
 
+authRouter.post('/resetPassword', async (req, res) => {
+    try {
+        await auth.sendPasswordResetEmail(req.body.email, {
+            url: 'https://sahm-b2b16.firebaseapp.com/'
+        })
+
+        return res.json({ success: "Password reset email sent successfully" })
+    }
+    catch (error) {
+        return res.status(404).json({ error: "Email not found" })
+    }
+})
+
 module.exports = authRouter
