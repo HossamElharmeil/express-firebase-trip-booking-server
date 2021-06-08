@@ -77,7 +77,7 @@ userRouter.post('/reserveTrip', async (req, res) => {
             return res.json({ success: 'Trip added successfully', newTrip })
         }
         else {
-            return res.json({ error: 'Captain reserved'})
+            return res.status(403).json({ error: 'Captain reserved'})
         }
     }
     catch (error) {
