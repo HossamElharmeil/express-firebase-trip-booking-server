@@ -4,9 +4,12 @@ const verifyAdmin = require('../../middleware/verifyAdmin')
 const adminRouter = Router()
 adminRouter.use(verifyAdmin)
 
-const usersRouter = require('./usersRouter')
 const captainsRouter = require('./captainsRouter')
-adminRouter.use('/users', usersRouter)
+const tripsRouter = require('./tripsRouter')
+const usersRouter = require('./usersRouter')
+
 adminRouter.use('/captains', captainsRouter)
+adminRouter.use('/trips', tripsRouter)
+adminRouter.use('/users', usersRouter)
 
 module.exports = adminRouter
