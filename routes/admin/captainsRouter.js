@@ -11,7 +11,7 @@ captainsRouter.get('/getCaptains', async (req, res) => {
     res.json(captains)
 })
 
-tripsRouter.post('/getCaptain', async (req, res) => {
+captainsRouter.post('/getCaptain', async (req, res) => {
     const uid = req.body.uid
 
     const captain = (await db.collection('captains').doc(uid).get()).data()
