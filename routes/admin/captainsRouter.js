@@ -22,7 +22,7 @@ captainsRouter.post('/getCaptain', async (req, res) => {
 captainsRouter.put('/verifyCaptain', async (req, res) => {
     const captainId = req.body.captainId
     try {
-        await db.collection('captains').doc(captainId).set({ verified: true })
+        await db.collection('captains').doc(captainId).update({ verified: true })
         res.json({ success: 'Captain verified' })
     }
     catch (error) {
