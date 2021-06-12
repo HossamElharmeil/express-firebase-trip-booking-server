@@ -84,7 +84,7 @@ captainRouter.put('/rejectTrip', async (req, res) => {
                     data: {
                         click_action: "FLUTTER_NOTIFICATION_CLICK",
                         type: 'trip_cancelled',
-                        captainId: req.body.captainId,
+                        captainId: req.user.uid,
                         tripId
                     }
                 })
@@ -122,7 +122,7 @@ captainRouter.put('/finishTrip', async (req, res) => {
                     data: {
                         click_action: "FLUTTER_NOTIFICATION_CLICK",
                         type: 'trip_finished',
-                        captainId: req.body.captainId,
+                        captainId: req.user.uid,
                         tripId
                     }
                 })
