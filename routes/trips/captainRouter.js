@@ -46,7 +46,7 @@ captainRouter.put('/acceptTrip', async (req, res) => {
                     data: {
                         click_action: "FLUTTER_NOTIFICATION_CLICK",
                         type: 'trip_accepted',
-                        captainId: req.body.captainId,
+                        captainId: req.user.uid,
                         tripId
                     }
                 })
