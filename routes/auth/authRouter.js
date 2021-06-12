@@ -1,6 +1,7 @@
 const Router = require('express').Router
 const auth = require('firebase').auth()
 const db = require('firebase-admin').firestore()
+const adminAuth = require('firebase-admin').auth()
 const verifyToken = require('../../middleware/verifyToken')
 
 const authRouter = Router()
@@ -52,6 +53,19 @@ authRouter.post('/resetPassword', async (req, res) => {
     }
     catch (error) {
         return res.status(404).json({ error: "Email not found" })
+    }
+})
+
+authRouter.post('/changePassword', verifyToken, async (req, res) => {
+    const password = req.body.newPassword
+    const uid = req.user.uid
+
+    try {
+        adminAuth.updateUser(uid, { password })
+        return res.json({ success: 'Password changed successfully' })
+    }
+    catch {
+        return res.status(500).json({ error: 'Something went wrong' })
     }
 })
 
