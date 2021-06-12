@@ -145,6 +145,7 @@ captainRouter.put('/startTrip', async (req, res) => {
     
     try {
         const trip = (await db.collection('trips').doc(tripId).get()).data()
+        const user = (await db.collection('users').doc(trip.user.uid).get()).data()
 
         if (trip.captainId === req.user.uid) {
             await db.collection('trips').doc(tripId).update({ status: 'started' })
