@@ -196,6 +196,4 @@ userRouter.post('/addCuppon', async (req, res) => {
     }
 })
 
-
-
 module.exports = userRouter

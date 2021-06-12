@@ -158,7 +158,7 @@ captainRouter.put('/startTrip', async (req, res) => {
                     data: {
                         click_action: "FLUTTER_NOTIFICATION_CLICK",
                         type: 'trip_started',
-                        captainId: req.body.captainId,
+                        captainId: req.user.uid,
                         tripId
                     }
                 })
