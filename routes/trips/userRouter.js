@@ -55,7 +55,6 @@ userRouter.post('/reserveTrip', async (req, res) => {
             const newTripDocument = await db.collection('trips').add(newTrip)
             newTrip.id = newTripDocument.id
 
-            await db.collection('captains').doc(req.body.captainId).update({ available: false })
             if (captain.registrationToken) {
                 await messagingService.sendMessage(captain.registrationToken, {
                     notification: {

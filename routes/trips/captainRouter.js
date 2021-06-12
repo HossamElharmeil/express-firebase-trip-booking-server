@@ -35,6 +35,7 @@ captainRouter.put('/acceptTrip', async (req, res) => {
         
         if (trip.captainId === req.user.uid) {
             await db.collection('trips').doc(tripId).update({ status: 'accepted' })
+            await db.collection('captains').doc(req.user.uid).update({ available: false })
 
             if (user.registrationToken) {
                 await messaging.sendMessage(user.registrationToken, {
@@ -144,7 +145,6 @@ captainRouter.put('/startTrip', async (req, res) => {
     
     try {
         const trip = (await db.collection('trips').doc(tripId).get()).data()
-        await db.collection('captains').doc(req.user.uid).update({ available: true })
 
         if (trip.captainId === req.user.uid) {
             await db.collection('trips').doc(tripId).update({ status: 'started' })
