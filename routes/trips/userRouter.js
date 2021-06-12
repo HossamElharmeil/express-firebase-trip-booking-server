@@ -106,7 +106,7 @@ userRouter.put('/cancelTrip', async (req, res) => {
                     data: {
                         click_action: "FLUTTER_NOTIFICATION_CLICK",
                         type: 'trip_cancelled',
-                        captainId: req.body.captainId,
+                        captainId: captain.captainId,
                         tripId
                     }
                 })
