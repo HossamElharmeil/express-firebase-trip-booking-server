@@ -52,8 +52,8 @@ userRouter.post('/reserveTrip', async (req, res) => {
 
         if (captain.available === true) {
             const newTripDocument = db.collection('trips').doc()
-            newTrip.id = newTripDocument.id
             await newTripDocument.set(newTrip)
+            newTrip.id = newTripDocument.id
 
             if (captain.registrationToken) {
                 await messagingService.sendMessage(captain.registrationToken, {
@@ -68,8 +68,8 @@ userRouter.post('/reserveTrip', async (req, res) => {
                         status: 'new',
                         trip_type: req.body.type,
                         notes: req.body.notes || '',
-                        createdAt: new Date().getTime().toString(),
-                        tripId: newTripDocument.id
+                        createdAt: (new Date().getTime).toString(),
+                        tripId: newTrip.id
                     }
                 })
             }
