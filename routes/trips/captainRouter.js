@@ -196,6 +196,31 @@ captainRouter.put('/startTrip', async (req, res) => {
     }
 })
 
+captainRouter.post('/rateClient', (req, res) => {
+    const rating = req.body.rating
+    const uid = req.body.uid
+
+    try {
+        const user = (await db.collection('users').doc(uid).get()).data()
+
+        let ratingSum = user.ratingSum ?? 0 + rating
+        let ratingCount = user.ratingCount ?? 0 + 1
+        let ratingAverage = ratingSum / ratingCount
+
+        await db.collection('users').doc(uid).update({
+            ratingCount,
+            ratingSum,
+            ratingAverage
+        })
+
+        return res.json({ success: 'Client rated successfully' })
+    }
+    catch (error) {
+        console.error(error)
+        return res.status(500).json({ error: 'Something went wrong' })
+    }
+})
+
 captainRouter.post('/toggleAvailable', async (req, res) => {
     const uid = req.user.uid
     try {
