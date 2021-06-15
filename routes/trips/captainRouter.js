@@ -196,7 +196,7 @@ captainRouter.put('/startTrip', async (req, res) => {
     }
 })
 
-captainRouter.post('/rateClient', (req, res) => {
+captainRouter.post('/rateClient', async (req, res) => {
     const rating = req.body.rating
     const uid = req.body.uid
 
