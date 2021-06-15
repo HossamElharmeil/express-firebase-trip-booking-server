@@ -35,6 +35,35 @@ captainRouter.post('/addToWallet', async (req, res) => {
     }
 })
 
+captainRouter.post('/addPayment', async (req, res) => {
+    const amount = req.body.amount
+    const tripId = req.body.tripId
+    const wallet = req.body.wallet
+
+    try {
+        const trip = (await db.collection('trips').doc(tripId).get()).data()
+
+        await db.collection('payments').add({
+            amount,
+            status: 'pending',
+            createdAt: new Date().getTime()
+        })
+
+        if (wallet != 0) {
+            const wallet = (await db.collection('wallets').doc(trip.user.uid).get()).data()
+            await db.collection('wallets').doc(trip.user.uid).update({
+                amount: wallet?.amount || 0 + amount
+            })
+        }
+
+        return res.json({ success: 'Payment done successfully' })
+    }
+    catch (error) {
+        console.error(error)
+        return res.status(500).json({ error: 'Something went wrong' })
+    }
+})
+
 captainRouter.post('/withdraw', async (req, res) => {
     const uid = req.user.uid
     const amount = req.body.amount
