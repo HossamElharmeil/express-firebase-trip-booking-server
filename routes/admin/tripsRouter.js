@@ -3,7 +3,7 @@ const db = require('firebase-admin').firestore()
 
 const tripsRouter = Router()
 
-tripsRouter.get('/getTrips', async (req, res) => {
+tripsRouter.get('/getTrips', async (_, res) => {
     const tripsQuery = await db.collection('trips').get()
     const trips = tripsQuery.docs.map(doc => {
         const data = doc.data()

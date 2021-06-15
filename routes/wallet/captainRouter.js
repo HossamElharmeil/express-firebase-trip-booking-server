@@ -52,7 +52,7 @@ captainRouter.post('/addPayment', async (req, res) => {
         if (wallet != 0) {
             const wallet = (await db.collection('wallets').doc(trip.user.uid).get()).data()
             await db.collection('wallets').doc(trip.user.uid).update({
-                amount: wallet.amount || 0 + amount
+                amount: wallet?.amount || 0 + amount
             })
         }
 

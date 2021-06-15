@@ -3,7 +3,7 @@ const db = require('firebase-admin').firestore()
 
 const messagesRouter = Router()
 
-messagesRouter.get('/getMessages', async (req, res) => {
+messagesRouter.get('/getMessages', async (_, res) => {
     const messagesQuery = await db.collection('messages').get()
     const messages = messagesQuery.docs.map(doc => {
         const data = doc.data()
