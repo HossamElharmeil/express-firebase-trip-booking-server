@@ -26,6 +26,25 @@ captainRouter.get('/getPreviousTrips', async (req, res) => {
     }
 })
 
+captainRouter.get('/getCurrentTrip', async (req, res) => {
+    const uid = req.user.uid
+
+    try {
+        const tripsQuery = await db.collection('trips')
+            .where('captainId', '==', uid)
+            .where('status', 'not-in', ['rejected', 'cancelled', 'finished'])
+            .get()
+        
+        const trip = tripsQuery.docs[0].data()
+
+        return res.json({ trip })
+    }
+    catch (error) {
+        console.error(error)
+        return res.status(500).json({ error })
+    }
+})
+
 captainRouter.put('/acceptTrip', async (req, res) => {
     const tripId = req.body.tripId
     
