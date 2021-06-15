@@ -67,7 +67,7 @@ userRouter.post('/reserveTrip', async (req, res) => {
                         status: 'new',
                         trip_type: req.body.type,
                         notes: req.body.notes || '',
-                        createdAt: new Date().getTime().toString(),
+                        createdAt: new Date().getTime(),
                         tripId: newTripDocument.id
                     }
                 })
