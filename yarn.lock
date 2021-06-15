@@ -1389,11 +1389,6 @@ is-yarn-global@^0.3.0:
   resolved "https://registry.yarnpkg.com/is-yarn-global/-/is-yarn-global-0.3.0.tgz#d502d3382590ea3004893746754c89139973e232"
   integrity sha512-VjSeb/lHmkoyd8ryPVIKvOCn4D1koMqY+vqyjjUfc3xyKtP4dYOxM44sZrnqQSzSds3xyOrUTLTC9LVCVgLngw==
 
-isodate-lite@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/isodate-lite/-/isodate-lite-1.0.0.tgz#fbfb1b2817657e14f8da50509fae2b5f1a125d25"
-  integrity sha512-0TJR5tA92rKvexs0Y0T4No3v7OE6qHKNkgNpqFIROfMf3k3NnlbqpwK5vS60sVIFow2mAGR4O9k34dpzKY1C1g==
-
 json-bigint@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/json-bigint/-/json-bigint-1.0.0.tgz#ae547823ac0cad8398667f8cd9ef4730f5b01ff1"

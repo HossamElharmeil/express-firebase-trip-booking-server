@@ -1,6 +1,5 @@
 const db = require('firebase-admin').firestore()
 const verifyToken = require("../../middleware/verifyToken")
-const toISOString = require('isodate-lite').convertDatesToISOStrings
 const estimatePrice = require('./util/estimatePrice')
 const messagingService = require('../../services/index').messaging
 
@@ -38,7 +37,7 @@ userRouter.post('/reserveTrip', async (req, res) => {
         rating: 0,
         notes: req.body.notes || '',
         estimatePrice: estimatePrice(req.body.dropoff, req.body.pickup),
-        createdAt: toISOString(Date.now())
+        createdAt: new Date().getTime()
     }
 
     try {
