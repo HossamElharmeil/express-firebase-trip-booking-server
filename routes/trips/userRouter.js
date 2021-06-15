@@ -52,6 +52,7 @@ userRouter.post('/reserveTrip', async (req, res) => {
 
         if (captain.available === true) {
             const newTripDocument = db.collection('trips').doc()
+            newTrip.id = newTripDocument.id
             await newTripDocument.set(newTrip)
 
             if (captain.registrationToken) {
