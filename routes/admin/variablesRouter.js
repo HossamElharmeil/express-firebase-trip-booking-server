@@ -3,12 +3,14 @@ const db = require('firebase-admin').firestore()
 
 const variablesRouter = Router()
 
-variablesRouter.post('/setVariables', async (_, res) => {
+variablesRouter.post('/setVariables', async (req, res) => {
     let variables = {}
 
     if (req.body.points) variables.points = req.body.points
-    if (req.body.pricePerKilo) variables.pricePerKilo = req.body.pricePerKilo
     if (req.body.minimumPoints) variables.minimumPoints = req.body.minimumPoints
+    if (req.body.pricePerKilo) variables.pricePerKilo = req.body.pricePerKilo
+    if (req.body.pricePerHour) variables.pricePerHour = req.body.pricePerHour
+    if (req.body.commission) variables.commission = req.body.commission
 
     try {
         await db.collection('variables').doc('variables').update(variables)
