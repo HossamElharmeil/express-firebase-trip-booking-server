@@ -2,6 +2,7 @@ const Router = require('express').Router
 const verifyToken = require('../../middleware/verifyToken')
 const db = require('firebase-admin').firestore()
 const auth = require('firebase-admin').auth()
+const messaging = require('../../services/messaging')
 
 const registerRouter = Router()
 
@@ -30,6 +31,8 @@ registerRouter.post('/registerCaptain', async (req, res) => {
             displayName: `${newData.firstName} ${newData.lastName}`
         })
 
+        await messaging.subscribe(req.body.registrationToken, 'captains')
+
         return res.json({ success: 'Captain data updated' })
     }
     catch (error) {
@@ -56,6 +59,9 @@ registerRouter.post('/registerUser', async (req, res) => {
             password: req.body.password,
             displayName: `${newData.firstName} ${newData.lastName}`
         })
+
+        await messaging.subscribe(req.body.registrationToken, 'users')
+
         return res.json({ success: 'User data updated' })
     }
     catch (error) {
