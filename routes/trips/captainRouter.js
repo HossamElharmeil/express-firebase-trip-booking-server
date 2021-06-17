@@ -50,6 +50,10 @@ captainRouter.put('/acceptTrip', async (req, res) => {
     
     try {
         const trip = (await db.collection('trips').doc(tripId).get()).data()
+        if (!trip) {
+            return res.status(404).json({ error: 'Trip not found' })
+        }
+        
         const user = (await db.collection('users').doc(trip.user.uid).get()).data()
         
         if (trip.captainId === req.user.uid) {
@@ -88,6 +92,10 @@ captainRouter.put('/rejectTrip', async (req, res) => {
     
     try {
         const trip = (await db.collection('trips').doc(tripId).get()).data()
+        if (!trip) {
+            return res.status(404).json({ error: 'Trip not found' })
+        }
+
         const user = (await db.collection('users').doc(trip.user.uid).get()).data()
 
         if (trip.captainId === req.user.uid) {
