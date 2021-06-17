@@ -3,7 +3,7 @@ const db = require('firebase-admin').firestore()
 
 const charityRouter = Router()
 
-charityRouter.get('/getCharities', async (req, res) => {
+charityRouter.get('/getCharities', async (_, res) => {
     try {
         const charitiesQuery = await db.collection('charities').get()
 
