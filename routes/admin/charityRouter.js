@@ -3,6 +3,20 @@ const db = require('firebase-admin').firestore()
 
 const charityRouter = Router()
 
+charityRouter.get('/getCharities', async (req, res) => {
+    try {
+        const charitiesQuery = await db.collection('charities').get()
+
+        const charities = charitiesQuery.docs.map(doc => doc.data())
+
+        return res.json(charities)
+    }
+    catch (error) {
+        console.error(error)
+        return res.json({ error: 'Something went wrong' })
+    }
+})
+
 charityRouter.post('/addCharity', async (req, res) => {
     const newCharity = {
         name: req.body.name,
