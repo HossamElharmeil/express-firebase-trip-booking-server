@@ -27,6 +27,23 @@ charityRouter.get('/getCharities', async (_, res) => {
     }
 })
 
+charityRouter.get('/getCharity/:charityId', async (req, res) => {
+    const charityId = req.params.charityId
+
+    try {
+        const charity = (await db.collection('charities').doc(charityId).get()).data()
+        const donationsQuery = await db.collection('charities').doc(charityId).collection('donations').get()
+        const donations = donationsQuery.docs.map(doc => doc.data())
+        charity.donations = donations
+
+        return res.json(charity)
+    }
+    catch (error) {
+        console.error(error)
+        return res.json({ error: 'Something went wrong' })
+    }
+})
+
 charityRouter.post('/addCharity', async (req, res) => {
     const newCharity = {
         name: req.body.name,
