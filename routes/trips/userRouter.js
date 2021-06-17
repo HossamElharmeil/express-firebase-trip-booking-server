@@ -50,8 +50,8 @@ userRouter.post('/reserveTrip', async (req, res) => {
     let newTrip = {
         captainId: req.body.captainId,
         status: 'new',
-        pickup: req.body.pickup,
-        dropoff: req.body.dropoff,
+        pickup: req.body.pickup || {},
+        dropoff: req.body.dropoff || {},
         type: req.body.type,
         rating: 0,
         notes: req.body.notes || '',
