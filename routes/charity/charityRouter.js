@@ -35,6 +35,12 @@ charityRouter.post('/addDonation', async (req, res) => {
     try {
         await db.collection('charities').doc(charityId).collection('donations').add(newDonation)
 
+        const charity = (await db.collection('charities').doc(charityId).get()).data()
+        const totalDonations = charity.totalDonations + newDonation.amount
+        const donationsCount = charity.donationsCount + 1
+
+        await db.collection('charities').doc(charityId).update({ totalDonations, donationsCount })
+
         return res.json({ success: 'Donation added successfully' })
     }
     catch (error) {

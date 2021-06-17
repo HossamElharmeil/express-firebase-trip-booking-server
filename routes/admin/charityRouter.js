@@ -49,6 +49,7 @@ charityRouter.post('/addCharity', async (req, res) => {
         name: req.body.name,
         description: req.body.description,
         address: req.body.address,
+        price: req.body.price,
         photoURL: req.body.photoURL,
         totalDonations: 0,
         donationsCount: 0
