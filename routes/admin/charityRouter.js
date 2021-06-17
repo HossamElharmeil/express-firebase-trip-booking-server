@@ -13,7 +13,11 @@ charityRouter.get('/getCharities', async (_, res) => {
     try {
         const charitiesQuery = await db.collection('charities').get()
 
-        const charities = charitiesQuery.docs.map(doc => doc.data())
+        const charities = charitiesQuery.docs.map(doc => {
+            const data = doc.data()
+            data.id = doc.id
+            return data
+        })
 
         return res.json(charities)
     }
