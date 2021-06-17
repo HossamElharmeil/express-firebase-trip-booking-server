@@ -43,7 +43,7 @@ charityRouter.post('/uploadPhoto', (req, res) => {
     let imageFileName
     let imageToBeUploaded = {}
 
-    busboy.on('file',  (_, file, filename, _, mimetype) => {
+    busboy.on('file',  (_, file, filename, __, mimetype) => {
         if (mimetype !== 'image/png' && mimetype !== 'image/jpeg' && mimetype !== 'image/jpg') 
             return res.status(400).json({ error: 'Unsupported file format' })
         
