@@ -56,15 +56,20 @@ imageRouter.post('/uploadImage', async (req, res) => {
                     }
                 }
             })
-            const imageUrl =
+            const photoURL =
                 `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${imageFileName}?alt=media`
             
             const imageQuery = (await db.collection('images').doc(uid).get()).data()
-            const images = imageQuery? imageQuery.images ? imageQuery.images : [] : []
-            images.concat([imageUrl])
+            const images = imageQuery?.images ? imageQuery.images : []
+
+            if (images === []) {
+                await db.collection('captains').doc(uid).update({ photoURL })
+            }
+
+            images.concat([photoURL])
             await db.collection('images').doc(uid).update({ images })
 
-            return res.json({ message: 'Image uploaded successfully', imageUrl })
+            return res.json({ message: 'Image uploaded successfully', photoURL })
         }
         catch (error) {
             console.error(error)
