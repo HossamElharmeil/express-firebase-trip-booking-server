@@ -217,7 +217,7 @@ userRouter.post('/addCuppon', async (req, res) => {
 userRouter.get('/getSegments', async (_, res) => {
     try {
         const segmentsQuery = await db.collection('segments').get()
-        const segments = segmentsQuery.map(doc => {
+        const segments = segmentsQuery.docs.map(doc => {
             const data = doc.data()
             data.id = doc.id
             return data
