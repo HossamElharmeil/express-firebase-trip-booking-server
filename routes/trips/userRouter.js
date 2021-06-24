@@ -160,16 +160,16 @@ userRouter.post('/rateTrip', async (req, res) => {
     
     try {
         const trip = (await db.collection('trips').doc(tripId).get()).data()
-        const captain = (await db.collection('captains').doc(uid).get()).data()
+        const captain = (await db.collection('captains').doc(trip.captainId).get()).data()
 
-        if (trip.captainId === req.user.uid && trip.status === 'finished') {
+        if (trip.user.uid === uid && trip.status === 'finished') {
             await db.collection('trips').doc(tripId).update({ rating, review })
             
             const newSum = captain.ratingSum || 0 + rating
             const newCount = captain.ratingCount || 0 + 1
             const newAverage = newSum / newCount
 
-            await db.collection('captains').doc(uid).update({
+            await db.collection('captains').doc(trip.captainId).update({
                 ratingAverage: newAverage,
                 ratingSum: newSum,
                 ratingCount: newCount
