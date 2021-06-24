@@ -214,12 +214,16 @@ userRouter.post('/addCuppon', async (req, res) => {
     }
 })
 
-userRouter.get('/getSegments', async (_, res) => {
+userRouter.post('/getSegments', async (req, res) => {
+    const pickup = req.body.pickup
+    const dropoff = req.body.dropoff
+
     try {
         const segmentsQuery = await db.collection('segments').get()
         const segments = segmentsQuery.docs.map(doc => {
             const data = doc.data()
             data.id = doc.id
+            data.price = estimatePrice(pickup, dropoff, data.price)
             return data
         })
 
