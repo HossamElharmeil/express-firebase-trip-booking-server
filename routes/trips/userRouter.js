@@ -214,4 +214,21 @@ userRouter.post('/addCuppon', async (req, res) => {
     }
 })
 
+userRouter.get('/getSegments', async (_, res) => {
+    try {
+        const segmentsQuery = await db.collection('segments').get()
+        const segments = segmentsQuery.map(doc => {
+            const data = doc.data()
+            data.id = doc.id
+            return data
+        })
+
+        return res.json(segments)
+    }
+    catch (error) {
+        console.error(error)
+        return res.status(500).json({ error: 'Something went wrong' })
+    }
+})
+
 module.exports = userRouter
