@@ -46,7 +46,7 @@ captainsRouter.delete('/deleteCaptain', async (req, res) => {
 })
 
 captainsRouter.put('/changeSegment', async (req, res) => {
-    const segmentId = req.body.segment
+    const segmentId = req.body.segmentId
     const captainId = req.body.captainId
 
     try {
