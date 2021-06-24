@@ -5,7 +5,7 @@ const os = require('os')
 const path = require('path')
 const storage = require('firebase-admin').storage()
 
-exports.uploadImage = async (req) => {
+const uploadImage = async (req) => {
     const busboy = new BusBoy({ headers: req.headers })
     let imageFileName
     let imageToBeUploaded = {}
@@ -45,3 +45,5 @@ exports.uploadImage = async (req) => {
     
     req.pipe(busboy)
 }
+
+module.exports = uploadImage

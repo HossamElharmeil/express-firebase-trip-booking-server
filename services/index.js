@@ -1,5 +1,5 @@
 const messaging = require('./messaging')
-const images = require('./images')
+const uploadImage = require('./images')
 
 exports.messaging = messaging
-exports.images = images
+exports.uploadImage = uploadImage

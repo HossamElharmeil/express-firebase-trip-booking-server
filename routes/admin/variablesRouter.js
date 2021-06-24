@@ -1,5 +1,6 @@
 const Router = require('express').Router
 const db = require('firebase-admin').firestore()
+const { uploadImage } = require('../../services/index')
 
 const variablesRouter = Router()
 
@@ -111,6 +112,18 @@ variablesRouter.get('/getSegment/:id', async (req, res) => {
         const segment = (await db.collection('segments').doc(segmentId).get()).data()
 
         return res.json(segment)
+    }
+    catch (error) {
+        console.error(error)
+        return res.status(500).json({ error: 'Something went wrong' })
+    }
+})
+
+variablesRouter.post('uploadSegmentPhoto', async (req, res) => {
+    try {
+        const imageURL = await uploadImage(req)
+
+        return res.json({ success: 'Image uploaded successfully', imageURL })
     }
     catch (error) {
         console.error(error)
