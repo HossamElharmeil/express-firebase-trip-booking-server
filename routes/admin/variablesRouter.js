@@ -134,7 +134,9 @@ variablesRouter.post('uploadSegmentPhoto', async (req, res) => {
 variablesRouter.post('/addSegment', async (req, res) => {
     const newSegment = {
         name: req.body.name,
-        price: req.body.price
+        price: req.body.price,
+        description: req.body.description,
+        photoURL: req.body.photoURL
     }
 
     try {
