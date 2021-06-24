@@ -227,7 +227,7 @@ userRouter.post('/getSegments', async (req, res) => {
             return data
         })
 
-        return res.json(segments)
+        return res.json({ segments })
     }
     catch (error) {
         console.error(error)
