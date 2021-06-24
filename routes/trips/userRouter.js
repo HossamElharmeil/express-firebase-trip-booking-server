@@ -94,7 +94,7 @@ userRouter.post('/reserveTrip', async (req, res) => {
                     data: {
                         click_action: "FLUTTER_NOTIFICATION_CLICK",
                         type: 'new_trip',
-                        captainId: req.body.captainId,
+                        captainId: req.body.nearbyCaptains[0],
                         status: 'new',
                         trip_type: req.body.type,
                         notes: req.body.notes || '',
