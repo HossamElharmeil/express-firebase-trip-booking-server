@@ -99,19 +99,40 @@ captainRouter.put('/rejectTrip', async (req, res) => {
         const user = (await db.collection('users').doc(trip.user.uid).get()).data()
 
         if (trip.captainId === req.user.uid) {
-            await db.collection('trips').doc(tripId).update({ status: 'rejected' })
             await db.collection('captains').doc(req.user.uid).update({ available: true })
+            await db.collection('users').doc(trip.user.uid).collection('captains').doc(trip.captainId).delete()
 
-            if (user.registrationToken) {
+            const nearbyCaptainsQuery = await db.collection('users').doc(trip.user.uid).collection('captains').get()
+            const nearbyCaptains = nearbyCaptainsQuery.docs.map(doc => doc.data())
+
+            if (nearbyCaptains.length === 0)
                 await messaging.sendMessage(user.registrationToken, {
                     notification: {
-                        title: 'Trip Cancelled',
+                        title: 'No Drivers Found',
                         body: 'Your trip has been cancelled by the driver'
                     },
                     data: {
                         click_action: "FLUTTER_NOTIFICATION_CLICK",
-                        type: 'trip_cancelled',
-                        captainId: req.user.uid,
+                        type: 'not_found',
+                        tripId
+                    }
+                })
+            
+            else {
+                await db.collection(trips).doc(tripId).update({ captain: nearbyCaptains[0], captainId: nearbyCaptains[0].captainId})
+                await messagingService.sendMessage(nearbyCaptains[0].registrationToken, {
+                    notification: {
+                        title: 'New Trip',
+                        body: 'There is a new trip reservation waiting for you!'
+                    },
+                    data: {
+                        click_action: "FLUTTER_NOTIFICATION_CLICK",
+                        type: 'new_trip',
+                        captainId: nearbyCaptains[0].captainId,
+                        status: 'new',
+                        trip_type: trip.type,
+                        notes: trip.notes,
+                        createdAt: trip.createdAt,
                         tripId
                     }
                 })

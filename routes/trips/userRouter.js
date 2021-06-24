@@ -47,8 +47,11 @@ userRouter.get('/getCurrentTrip', async (req, res) => {
 })
 
 userRouter.post('/reserveTrip', async (req, res) => {
+    const uid = req.user.uid
+
     let newTrip = {
-        captainId: req.body.captainId,
+        captainId: req.body.nearbyCaptains[0],
+        segmentId: req.body.segmentId,
         status: 'new',
         pickup: req.body.pickup || {},
         dropoff: req.body.dropoff || {},
@@ -60,7 +63,15 @@ userRouter.post('/reserveTrip', async (req, res) => {
     }
 
     try {
-        const captain = (await db.collection('captains').doc(req.body.captainId).get()).data()
+        req.body.nearbyCaptains.forEach(async id => {
+            const captain = (await db.collection('captains').doc(id).get()).data()
+            if (!captain) return
+
+            if (newTrip.type === captain.type || captain.type === 'both' && captain.segmentId === newTrip.segmentId)
+                await db.collection('users').doc(uid).collection('captains').doc(id).set(captain)
+        })
+
+        const captain = (await db.collection('captains').doc(req.body.nearbyCaptains[0]).get()).data()
         if (!captain) {
             return res.status(404).json({ error: 'Captain not found' })
         }
@@ -69,12 +80,12 @@ userRouter.post('/reserveTrip', async (req, res) => {
         newTrip.user = user
         newTrip.captain = captain
 
-        if (captain.available === true) {
+        if (captain?.available === true) {
             const newTripDocument = db.collection('trips').doc()
             await newTripDocument.set(newTrip)
             newTrip.id = newTripDocument.id
 
-            if (captain.registrationToken) {
+            if (captain?.registrationToken) {
                 await messagingService.sendMessage(captain.registrationToken, {
                     notification: {
                         title: 'New Trip',
