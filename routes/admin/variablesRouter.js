@@ -119,11 +119,9 @@ variablesRouter.get('/getSegment/:id', async (req, res) => {
     }
 })
 
-variablesRouter.post('uploadSegmentPhoto', async (req, res) => {
+variablesRouter.post('/uploadSegmentPhoto', async (req, res) => {
     try {
-        const imageURL = await uploadImage(req)
-
-        return res.json({ success: 'Image uploaded successfully', imageURL })
+        return await uploadImage(req, res)
     }
     catch (error) {
         console.error(error)
@@ -133,10 +131,10 @@ variablesRouter.post('uploadSegmentPhoto', async (req, res) => {
 
 variablesRouter.post('/addSegment', async (req, res) => {
     const newSegment = {
-        name: req.body.name,
-        price: req.body.price,
-        description: req.body.description,
-        photoURL: req.body.photoURL
+        name: req.body.name || 'Unnamed segment',
+        price: req.body.price || 0,
+        description: req.body.description || 'No description',
+        photoURL: req.body.photoURL || ''
     }
 
     try {

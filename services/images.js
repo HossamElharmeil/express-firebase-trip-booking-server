@@ -5,14 +5,14 @@ const os = require('os')
 const path = require('path')
 const storage = require('firebase-admin').storage()
 
-const uploadImage = async (req) => {
+const uploadImage = async (req, res) => {
     const busboy = new BusBoy({ headers: req.headers })
     let imageFileName
     let imageToBeUploaded = {}
 
-    busboy.on('file',  (_, file, filename, __, mimetype) => {
+    busboy.on('file', (_, file, filename, __, mimetype) => {
         if (mimetype !== 'image/png' && mimetype !== 'image/jpeg' && mimetype !== 'image/jpg') 
-            throw Error('Unsupported format')
+            return Promise.reject('Unsupported format')
         
         const imageExtension = path.extname(filename)
         imageFileName = `${Math.round(Math.random() * 100000000000)}${imageExtension}`
@@ -36,10 +36,10 @@ const uploadImage = async (req) => {
             const photoURL =
                 `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${imageFileName}?alt=media`
 
-            return photoURL
+            return res.json({ photoURL })
         }
         catch (error) {
-            throw Error('Image upload error')
+            return Promise.reject('Image upload error')
         }
     })
     
