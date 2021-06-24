@@ -26,6 +26,7 @@ carsRouter.post('/addCar', verifyToken, async (req, res) => {
         make: req.body.make,
         model: req.body.model,
         year: req.body.year,
+        plate: req.body.plate,
         captainId: uid
     }
     try {
