@@ -45,4 +45,17 @@ captainsRouter.delete('/deleteCaptain', async (req, res) => {
     }
 })
 
+captainsRouter.put('/changeSegment', async (req, res) => {
+    const segmentId = req.body.segment
+    const captainId = req.body.captainId
+
+    try {
+        await db.collection('captains').doc(captainId).update({ segmentId })
+    }
+    catch (error) {
+        console.error(error)
+        return res.status(500).json({ error: 'Something went wrong' })
+    }
+})
+
 module.exports = captainsRouter
