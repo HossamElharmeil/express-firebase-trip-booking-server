@@ -43,7 +43,7 @@ imageRouter.post('/uploadImage', async (req, res) => {
         imageToBeUploaded = { filepath, mimetype }
 
         file.pipe(fs.createWriteStream(filepath))
-    });
+    })
 
     req.busboy.on('finish', async () => {
         try {
@@ -86,11 +86,10 @@ imageRouter.post('/uploadImage', async (req, res) => {
 imageRouter.post('/uploadProfile', (req, res) => {
     const uid = req.user.uid
     
-    const busboy = new BusBoy({ headers: req.headers })
     let imageFileName
     let imageToBeUploaded = {}
 
-    busboy.on('file',  (_, file, filename, __, mimetype) => {
+    req.busboy.on('file',  (_, file, filename, __, mimetype) => {
         if (mimetype !== 'image/png' && mimetype !== 'image/jpeg' && mimetype !== 'image/jpg') 
             return res.status(400).json({ error: 'Unsupported file format' })
         
@@ -103,7 +102,7 @@ imageRouter.post('/uploadProfile', (req, res) => {
         file.pipe(fs.createWriteStream(filepath))
     });
 
-    busboy.on('finish', async () => {
+    req.busboy.on('finish', async () => {
         try {
             await storage.bucket(config.storageBucket).upload(imageToBeUploaded.filepath, {
                 resumable: false,
