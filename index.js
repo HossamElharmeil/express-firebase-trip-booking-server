@@ -15,7 +15,7 @@ app.use(busboy())
 app.use(cors)
 
 app.use(routes)
-app.get('/', (req, res) => {
+app.get('/', (_, res) => {
     res.send('Mmyallo!')
 })
 
