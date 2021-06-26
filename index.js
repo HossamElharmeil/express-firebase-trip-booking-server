@@ -1,4 +1,4 @@
-const PORT = 8080
+const PORT = process.env.PORT || 8080
 
 require('firebase-admin').initializeApp()
 const busboy = require('connect-busboy')
