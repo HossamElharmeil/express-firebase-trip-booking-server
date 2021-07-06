@@ -64,7 +64,7 @@ notificationRouter.post('/sendNotification', async (req, res) => {
             return res.json({ success: 'Notification sent successfully' })
         }
     }
-    catch {
+    catch (error) {
         console.error(error)
         return res.status(500).json({ error: 'Something went wrong' })
     }
