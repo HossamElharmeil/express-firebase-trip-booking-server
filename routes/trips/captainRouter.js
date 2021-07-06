@@ -1,6 +1,7 @@
 const db = require('firebase-admin').firestore()
 const verifyToken = require("../../middleware/verifyToken")
 const messaging = require('../../services/index').messaging
+const deleteCollection = require('../../services/db')
 
 const Router = require('express').Router
 
@@ -57,6 +58,7 @@ captainRouter.put('/acceptTrip', async (req, res) => {
         const user = (await db.collection('users').doc(trip.user.uid).get()).data()
         
         if (trip.captainId === req.user.uid) {
+            await deleteCollection(db, `users/${user.uid}/captains`, 100)
             await db.collection('trips').doc(tripId).update({ status: 'accepted' })
             await db.collection('captains').doc(req.user.uid).update({ available: false })
 
