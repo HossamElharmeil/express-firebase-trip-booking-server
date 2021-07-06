@@ -65,9 +65,20 @@ userRouter.post('/reserveTrip', async (req, res) => {
     try {
         req.body.nearbyCaptains.forEach(async id => {
             const captain = (await db.collection('captains').doc(id).get()).data()
-            if (!captain) return
+            if (!captain) return res.status(404).json({ error: 'Captain not found' })
 
-            if (newTrip.type === captain.type || captain.type === 'both' && captain.segmentId === newTrip.segmentId)
+            if (
+                (
+                    (
+                    newTrip.type === captain.type
+                    || captain.type === 'both'
+                )
+                    && (
+                        captain.segmentId === newTrip.segmentId
+                        || newTrip.type === 'sendSomething'
+                    )
+                )
+            )
                 await db.collection('users').doc(uid).collection('captains').doc(id).set(captain)
         })
 
