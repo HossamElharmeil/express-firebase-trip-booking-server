@@ -31,4 +31,4 @@ async function deleteQueryBatch(db, query, resolve) {
   })
 }
 
-export default deleteCollection
+module.exports = deleteCollection
