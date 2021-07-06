@@ -29,11 +29,10 @@ imageRouter.get('/getImages', async (req, res) => {
 imageRouter.post('/uploadImage', async (req, res) => {
     const uid = req.user.uid
     
-    const busboy = new BusBoy({ headers: req.headers })
     let imageFileName
     let imageToBeUploaded = {}
 
-    busboy.on('file',  (_, file, filename, __, mimetype) => {
+    req.busboy.on('file',  (_, file, filename, __, mimetype) => {
         if (mimetype !== 'image/png' && mimetype !== 'image/jpeg' && mimetype !== 'image/jpg') 
             return res.status(400).json({ error: 'Unsupported file format' })
         
@@ -44,9 +43,9 @@ imageRouter.post('/uploadImage', async (req, res) => {
         imageToBeUploaded = { filepath, mimetype }
 
         file.pipe(fs.createWriteStream(filepath))
-    });
+    })
 
-    busboy.on('finish', async () => {
+    req.busboy.on('finish', async () => {
         try {
             await storage.bucket(config.storageBucket).upload(imageToBeUploaded.filepath, {
                 resumable: false,
@@ -60,14 +59,18 @@ imageRouter.post('/uploadImage', async (req, res) => {
                 `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${imageFileName}?alt=media`
             
             const imageQuery = (await db.collection('images').doc(uid).get()).data()
-            const images = imageQuery?.images ? imageQuery.images : []
+            const currentImages = imageQuery?.images ? imageQuery.images : []
 
-            if (images === []) {
+            if (currentImages.length === 0) {
                 await db.collection('captains').doc(uid).update({ photoURL })
-            }
 
-            images.concat([photoURL])
-            await db.collection('images').doc(uid).update({ images })
+                const images = [ ...currentImages, photoURL ]
+                await db.collection('images').doc(uid).set({ images })
+            }
+            else {
+                const images = [ ...currentImages, photoURL ]
+                await db.collection('images').doc(uid).update({ images })
+            }
 
             return res.json({ message: 'Image uploaded successfully', photoURL })
         }
@@ -77,17 +80,16 @@ imageRouter.post('/uploadImage', async (req, res) => {
         }
     })
     
-    req.pipe(busboy)
+    req.pipe(req.busboy)
 })
 
 imageRouter.post('/uploadProfile', (req, res) => {
     const uid = req.user.uid
     
-    const busboy = new BusBoy({ headers: req.headers })
     let imageFileName
     let imageToBeUploaded = {}
 
-    busboy.on('file',  (_, file, filename, __, mimetype) => {
+    req.busboy.on('file',  (_, file, filename, __, mimetype) => {
         if (mimetype !== 'image/png' && mimetype !== 'image/jpeg' && mimetype !== 'image/jpg') 
             return res.status(400).json({ error: 'Unsupported file format' })
         
@@ -100,7 +102,7 @@ imageRouter.post('/uploadProfile', (req, res) => {
         file.pipe(fs.createWriteStream(filepath))
     });
 
-    busboy.on('finish', async () => {
+    req.busboy.on('finish', async () => {
         try {
             await storage.bucket(config.storageBucket).upload(imageToBeUploaded.filepath, {
                 resumable: false,
@@ -124,7 +126,7 @@ imageRouter.post('/uploadProfile', (req, res) => {
         }
     })
     
-    req.pipe(busboy)
+    req.pipe(req.busboy)
 })
 
 module.exports = imageRouter
